@@ -19,7 +19,6 @@ interface ShoppDao {
     @Query("select * from shopp_table")
     fun getAllShopItem(): Flow<List<ShoppEntity>>
 
-
     @Query("select SUM(price * amount) from shopp_table")
     fun observeTotalPrice(): Flow<Float>
 
