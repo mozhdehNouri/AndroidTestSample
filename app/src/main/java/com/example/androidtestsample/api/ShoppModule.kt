@@ -3,6 +3,7 @@ package com.example.androidtestsample.api
 import android.content.Context
 import androidx.room.Room
 import com.example.androidtestsample.roomdatabase.ShopDatabase
+import com.example.androidtestsample.roomdatabase.ShoppDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +16,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ShoppModule {
-
 
     @Provides
     @Singleton
@@ -33,13 +33,21 @@ object ShoppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit() = Retrofit.Builder()
+    fun provideRetrofit(): Retrofit = Retrofit.Builder()
 //        .addConverterFactory(Json.asConverterFactory("application/json".))
         .baseUrl("https://jsonplaceholder.typicode.com/").build()
 
 
     @Provides
     @Singleton
-    fun provideShoppApi(retrofit: Retrofit) =
+    fun provideShoppApi(retrofit: Retrofit): ShoppApi =
         retrofit.create(ShoppApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideRepository(
+        dao: ShoppDao,
+        shoppApi: ShoppApi
+    ): ShoppRepository = ShoppRepositoryImpl(dao, shoppApi)
+
 }
